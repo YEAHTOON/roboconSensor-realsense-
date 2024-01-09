@@ -153,6 +153,30 @@ code/main/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/theProgram.dir/build.make CMakeFiles/theProgram.dir/code/main/main.cpp.s
 .PHONY : code/main/main.cpp.s
 
+code/net/net.o: code/net/net.cpp.o
+.PHONY : code/net/net.o
+
+# target to build an object file
+code/net/net.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/theProgram.dir/build.make CMakeFiles/theProgram.dir/code/net/net.cpp.o
+.PHONY : code/net/net.cpp.o
+
+code/net/net.i: code/net/net.cpp.i
+.PHONY : code/net/net.i
+
+# target to preprocess a source file
+code/net/net.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/theProgram.dir/build.make CMakeFiles/theProgram.dir/code/net/net.cpp.i
+.PHONY : code/net/net.cpp.i
+
+code/net/net.s: code/net/net.cpp.s
+.PHONY : code/net/net.s
+
+# target to generate assembly for a file
+code/net/net.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/theProgram.dir/build.make CMakeFiles/theProgram.dir/code/net/net.cpp.s
+.PHONY : code/net/net.cpp.s
+
 code/realsense/cpp/imuStream.o: code/realsense/cpp/imuStream.cpp.o
 .PHONY : code/realsense/cpp/imuStream.o
 
@@ -261,6 +285,9 @@ help:
 	@echo "... code/main/main.o"
 	@echo "... code/main/main.i"
 	@echo "... code/main/main.s"
+	@echo "... code/net/net.o"
+	@echo "... code/net/net.i"
+	@echo "... code/net/net.s"
 	@echo "... code/realsense/cpp/imuStream.o"
 	@echo "... code/realsense/cpp/imuStream.i"
 	@echo "... code/realsense/cpp/imuStream.s"

@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/yezhiteng/PROJECTS/2023_Final/code/main/main.cpp" "CMakeFiles/theProgram.dir/code/main/main.cpp.o" "gcc" "CMakeFiles/theProgram.dir/code/main/main.cpp.o.d"
+  "/home/yezhiteng/PROJECTS/2023_Final/code/net/net.cpp" "CMakeFiles/theProgram.dir/code/net/net.cpp.o" "gcc" "CMakeFiles/theProgram.dir/code/net/net.cpp.o.d"
   "/home/yezhiteng/PROJECTS/2023_Final/code/realsense/cpp/imuStream.cpp" "CMakeFiles/theProgram.dir/code/realsense/cpp/imuStream.cpp.o" "gcc" "CMakeFiles/theProgram.dir/code/realsense/cpp/imuStream.cpp.o.d"
   "/home/yezhiteng/PROJECTS/2023_Final/code/realsense/cpp/my_realsense2.cpp" "CMakeFiles/theProgram.dir/code/realsense/cpp/my_realsense2.cpp.o" "gcc" "CMakeFiles/theProgram.dir/code/realsense/cpp/my_realsense2.cpp.o.d"
   "/home/yezhiteng/PROJECTS/2023_Final/code/realsense/cpp/picStream.cpp" "CMakeFiles/theProgram.dir/code/realsense/cpp/picStream.cpp.o" "gcc" "CMakeFiles/theProgram.dir/code/realsense/cpp/picStream.cpp.o.d"

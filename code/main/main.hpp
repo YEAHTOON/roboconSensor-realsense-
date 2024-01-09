@@ -17,6 +17,7 @@
 #include "../realsense/my_realsense2.hpp"
 #include "../dataFrame/dataFrame.hpp"
 #include "../straightLine/straightLine.hpp"
+#include "../net/net.hpp"
 
 #include <pcl/io/pcd_io.h>
 
@@ -47,5 +48,31 @@
 #include <pcl/surface/concave_hull.h>
 
 #include <pcl/filters/passthrough.h>
+
+#include <time.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <string.h>
+
+#include <sys/prctl.h>
+#include <signal.h>
+
+#include <sys/types.h>
+#include <wait.h>
+
+
+//给线程间通信用的结构体
+typedef struct threadsMedium
+{
+    int intType[10];
+    float floatType[10];
+} threadsMedium;
+
 
 #endif

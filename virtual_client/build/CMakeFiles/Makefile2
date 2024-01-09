@@ -54,16 +54,16 @@ RM = /home/yezhiteng/anaconda3/lib/python3.9/site-packages/cmake/data/bin/cmake 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yezhiteng/PROJECTS/2023_Final
+CMAKE_SOURCE_DIR = /home/yezhiteng/PROJECTS/2023_Final/virtual_client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yezhiteng/PROJECTS/2023_Final/build
+CMAKE_BINARY_DIR = /home/yezhiteng/PROJECTS/2023_Final/virtual_client/build
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/theProgram.dir/all
+all: CMakeFiles/virtual_client.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/theProgram.dir/clean
+clean: CMakeFiles/virtual_client.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/theProgram.dir
+# Target rules for target CMakeFiles/virtual_client.dir
 
 # All Build rule for target.
-CMakeFiles/theProgram.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/theProgram.dir/build.make CMakeFiles/theProgram.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/theProgram.dir/build.make CMakeFiles/theProgram.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/yezhiteng/PROJECTS/2023_Final/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target theProgram"
-.PHONY : CMakeFiles/theProgram.dir/all
+CMakeFiles/virtual_client.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/yezhiteng/PROJECTS/2023_Final/virtual_client/build/CMakeFiles --progress-num=1,2 "Built target virtual_client"
+.PHONY : CMakeFiles/virtual_client.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/theProgram.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yezhiteng/PROJECTS/2023_Final/build/CMakeFiles 7
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/theProgram.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yezhiteng/PROJECTS/2023_Final/build/CMakeFiles 0
-.PHONY : CMakeFiles/theProgram.dir/rule
+CMakeFiles/virtual_client.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yezhiteng/PROJECTS/2023_Final/virtual_client/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/virtual_client.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yezhiteng/PROJECTS/2023_Final/virtual_client/build/CMakeFiles 0
+.PHONY : CMakeFiles/virtual_client.dir/rule
 
 # Convenience name for target.
-theProgram: CMakeFiles/theProgram.dir/rule
-.PHONY : theProgram
+virtual_client: CMakeFiles/virtual_client.dir/rule
+.PHONY : virtual_client
 
 # clean rule for target.
-CMakeFiles/theProgram.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/theProgram.dir/build.make CMakeFiles/theProgram.dir/clean
-.PHONY : CMakeFiles/theProgram.dir/clean
+CMakeFiles/virtual_client.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/clean
+.PHONY : CMakeFiles/virtual_client.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -13,8 +13,9 @@ include_directories(${PCL_INCLUDE_DIRS})
 aux_source_directory(./code/main main)
 aux_source_directory(./code/straightLine straightLine)
 aux_source_directory(./code/realsense/cpp realsense)
+aux_source_directory(./code/net net)
 
-add_executable(theProgram ${main} ${realsense} ${straightLine} ${featureMatch})
+add_executable(theProgram ${main} ${realsense} ${straightLine} ${featureMatch} ${net})
 
 target_link_libraries(theProgram ${OpenCV_LIBRARIES})
 target_link_libraries(theProgram ${realsense2_LIBRARY})

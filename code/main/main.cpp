@@ -264,6 +264,23 @@ void *detect_plane(void *args)
 
 
 
+
+
+/**
+ * 处理键盘输入的线程
+ * 用于退出进程以防止出现僵尸进程或孤儿进程一直运行
+*/
+void Process_keyBoard_Input(void *args)
+{
+
+}
+
+
+
+
+
+
+
 /**
  * 
  * 
@@ -274,18 +291,22 @@ void *detect_plane(void *args)
 */
 int main(int argc, char **argv)
 {
+    //防僵尸进程
+    signal(SIGCHLD, SIG_IGN);
+
     //信号量初始化
     sem_init(&detectPlane_SEM, 0, 0);
     sem_init(&detectFeature_SEM, 0, 0);
 
     //realsense初始化
-    realsenseInit();
+    // realsenseInit();
 
     //创建线程
     pthread_t pid[10];
-    pthread_create(pid, NULL, realsenseUpdate, (void *)NULL);       //更新图片
+    // pthread_create(pid, NULL, realsenseUpdate, (void *)NULL);       //更新图片
     // pthread_create(pid+1, NULL, detect_features, (void *)NULL);     //识别特征
-    pthread_create(pid+2, NULL, detect_plane, (void *)NULL);       //识别平面距离
+    // pthread_create(pid+2, NULL, detect_plane, (void *)NULL);        //识别平面距离
+    pthread_create(pid+3, NULL, processTCP, (void *)NULL);          //tcp通信
 
     int count;
     while(1)
