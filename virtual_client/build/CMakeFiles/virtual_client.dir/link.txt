@@ -1,1 +1,1 @@
-/usr/bin/c++ -rdynamic CMakeFiles/virtual_client.dir/code/main.cpp.o -o virtual_client 
+/usr/bin/c++ -rdynamic CMakeFiles/virtual_client.dir/code/main.cpp.o CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o -o virtual_client 

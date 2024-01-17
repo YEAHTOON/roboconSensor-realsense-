@@ -83,17 +83,49 @@ CMakeFiles/virtual_client.dir/code/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/virtual_client.dir/code/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/main.cpp -o CMakeFiles/virtual_client.dir/code/main.cpp.s
 
+CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o: CMakeFiles/virtual_client.dir/flags.make
+CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o: /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/tcp/tcp.cpp
+CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o: CMakeFiles/virtual_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/yezhiteng/PROJECTS/2023_Final/virtual_client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o -MF CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o.d -o CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o -c /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/tcp/tcp.cpp
+
+CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/tcp/tcp.cpp > CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.i
+
+CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/tcp/tcp.cpp -o CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.s
+
+CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o: CMakeFiles/virtual_client.dir/flags.make
+CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o: /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/uart/uart.cpp
+CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o: CMakeFiles/virtual_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/yezhiteng/PROJECTS/2023_Final/virtual_client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o -MF CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o.d -o CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o -c /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/uart/uart.cpp
+
+CMakeFiles/virtual_client.dir/code/uart/uart.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/virtual_client.dir/code/uart/uart.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/uart/uart.cpp > CMakeFiles/virtual_client.dir/code/uart/uart.cpp.i
+
+CMakeFiles/virtual_client.dir/code/uart/uart.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/virtual_client.dir/code/uart/uart.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yezhiteng/PROJECTS/2023_Final/virtual_client/code/uart/uart.cpp -o CMakeFiles/virtual_client.dir/code/uart/uart.cpp.s
+
 # Object files for target virtual_client
 virtual_client_OBJECTS = \
-"CMakeFiles/virtual_client.dir/code/main.cpp.o"
+"CMakeFiles/virtual_client.dir/code/main.cpp.o" \
+"CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o" \
+"CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o"
 
 # External object files for target virtual_client
 virtual_client_EXTERNAL_OBJECTS =
 
 virtual_client: CMakeFiles/virtual_client.dir/code/main.cpp.o
+virtual_client: CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o
+virtual_client: CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o
 virtual_client: CMakeFiles/virtual_client.dir/build.make
 virtual_client: CMakeFiles/virtual_client.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/yezhiteng/PROJECTS/2023_Final/virtual_client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable virtual_client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/yezhiteng/PROJECTS/2023_Final/virtual_client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable virtual_client"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/virtual_client.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

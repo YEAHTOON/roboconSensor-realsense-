@@ -153,6 +153,54 @@ code/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/code/main.cpp.s
 .PHONY : code/main.cpp.s
 
+code/tcp/tcp.o: code/tcp/tcp.cpp.o
+.PHONY : code/tcp/tcp.o
+
+# target to build an object file
+code/tcp/tcp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.o
+.PHONY : code/tcp/tcp.cpp.o
+
+code/tcp/tcp.i: code/tcp/tcp.cpp.i
+.PHONY : code/tcp/tcp.i
+
+# target to preprocess a source file
+code/tcp/tcp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.i
+.PHONY : code/tcp/tcp.cpp.i
+
+code/tcp/tcp.s: code/tcp/tcp.cpp.s
+.PHONY : code/tcp/tcp.s
+
+# target to generate assembly for a file
+code/tcp/tcp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/code/tcp/tcp.cpp.s
+.PHONY : code/tcp/tcp.cpp.s
+
+code/uart/uart.o: code/uart/uart.cpp.o
+.PHONY : code/uart/uart.o
+
+# target to build an object file
+code/uart/uart.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/code/uart/uart.cpp.o
+.PHONY : code/uart/uart.cpp.o
+
+code/uart/uart.i: code/uart/uart.cpp.i
+.PHONY : code/uart/uart.i
+
+# target to preprocess a source file
+code/uart/uart.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/code/uart/uart.cpp.i
+.PHONY : code/uart/uart.cpp.i
+
+code/uart/uart.s: code/uart/uart.cpp.s
+.PHONY : code/uart/uart.s
+
+# target to generate assembly for a file
+code/uart/uart.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/virtual_client.dir/build.make CMakeFiles/virtual_client.dir/code/uart/uart.cpp.s
+.PHONY : code/uart/uart.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -165,6 +213,12 @@ help:
 	@echo "... code/main.o"
 	@echo "... code/main.i"
 	@echo "... code/main.s"
+	@echo "... code/tcp/tcp.o"
+	@echo "... code/tcp/tcp.i"
+	@echo "... code/tcp/tcp.s"
+	@echo "... code/uart/uart.o"
+	@echo "... code/uart/uart.i"
+	@echo "... code/uart/uart.s"
 .PHONY : help
 
 
