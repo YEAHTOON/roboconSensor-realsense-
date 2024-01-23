@@ -48,7 +48,7 @@ void *send_PL_data(void *args)
     struct Temp
     {
         long mtype;
-        float mtext[4];
+        float mtext[2];
     } temp;
 
     while(1)
@@ -67,6 +67,7 @@ void *send_PL_data(void *args)
         sprintf(PLDirection,"%f",temp.mtext[1]);
         strcat(PLDistance,",");
         strcat(PLDistance,PLDirection);
+        strcat(PLDistance, "\n");
 
         //拼接
         // std::string toSend = "plane distance: " + PL_distance + "\n" + "plane x,y,z: " + PL_direction_x + "," + PL_direction_y + "," + PL_direction_z + ",";
@@ -79,9 +80,8 @@ void *send_PL_data(void *args)
         // 发送
         send(sokcetNumber, (void *)PLDistance, strlen(PLDistance), 0);
 
-
         // send(sokcetNumber, (void *)"1", 1, 0);
-        // sleep(1);
+        usleep(5000);
     }
 }
 
@@ -136,6 +136,8 @@ void *receiveData(void *args)
         // ssize_t sendRet = send(Args->socketNum, (void *)(Args->request), 128, 0);
     }
 }
+
+
 
 //向客户端传输的两个线程
 pthread_t send_pid[2];
@@ -328,6 +330,10 @@ void *processTCP(void *args)
             status = 0x00;
             sokcetNumber = 0;
 
+            //创建发送信息的线程
+            pthread_create(send_pid, NULL, send_PL_data, NULL);
+            NetStatus.workStatus |= 0x08;
+
             //响应客户端的请求
             Respond_ClientRequst(each_clientSocket, cliAddr, cliLen, sendToMain->pipeline_write[childcount], sendToMain->pipeline_read[childcount]);
         }
@@ -339,7 +345,6 @@ void *processTCP(void *args)
 
         //新管道
         childcount++;
-
         sendToMain->childcount = childcount;
     }
 }

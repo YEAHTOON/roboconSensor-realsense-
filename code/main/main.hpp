@@ -11,6 +11,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <semaphore.h>
+#include <exception>
 
 #include "../realsense/imuStream.hpp"
 #include "../realsense/picStream.hpp"

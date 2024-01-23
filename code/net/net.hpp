@@ -19,7 +19,7 @@
 
 #include <mutex>
 
-#define serveIP     "192.168.3.107"
+#define serveIP     "127.0.0.1"
 #define servePort   3000
 
 #define test_plane_distance 6.66f

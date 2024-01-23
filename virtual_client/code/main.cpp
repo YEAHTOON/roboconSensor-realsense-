@@ -12,7 +12,7 @@
 #include <pthread.h>
 #include "uart/uart.hpp"
 
-int main()
+int main(int argc, char **argv)
 {
     //小摄像头的数据
     smallCamera_data smallCamera_data_1;
@@ -47,6 +47,11 @@ int main()
     return 0;
 }
 
+
+
+
+
+
 // //接收数据线程
 // void *recvde(void *args)
 // {
@@ -61,15 +66,17 @@ int main()
 
 
 
-// int main(void)
+// int main(int argc, char **argv)
 // {
 //     //防止僵尸进程
 //     signal(SIGCHLD, SIG_IGN);
 
+//     std::cout << typeid(argv[1]).name() << std::endl;
+
 //     //本地的地址
 //     struct sockaddr_in cliAddr;
 //     cliAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-//     cliAddr.sin_port = htons(20000);
+//     cliAddr.sin_port = htons(std::atoi(argv[1]));
 //     cliAddr.sin_family = AF_INET;
 
 //     //套接字
@@ -91,7 +98,7 @@ int main()
 
 //     //另一端的地址
 //     struct sockaddr_in serAddr;
-//     serAddr.sin_addr.s_addr = inet_addr("192.168.3.107");
+//     serAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 //     serAddr.sin_port = htons(3000);
 //     serAddr.sin_family = AF_INET;
 

@@ -163,8 +163,8 @@ void *detect_plane(void *args)
         seg.setModelType(pcl::SACMODEL_PLANE);
         seg.setMethodType(pcl::SAC_RANSAC);
         seg.setMaxIterations(1000);
-        seg.setDistanceThreshold(0.01); 
-
+        seg.setDistanceThreshold(0.01);
+         
         //循环中会用到的变量循环外定义
         pcl::PointCloud<pcl::PointXYZ>::Ptr rest_cloud(new pcl::PointCloud<pcl::PointXYZ>);
         int source_size = (int)the_pc_ptr->points.size();
@@ -183,8 +183,15 @@ void *detect_plane(void *args)
         {
             acount++;
 
-            seg.setInputCloud(the_pc_ptr);
-            seg.segment(*inliers, *coefficients);
+            if(the_pc_ptr->size() > 10)
+            {
+                seg.setInputCloud(the_pc_ptr);
+                seg.segment(*inliers, *coefficients);
+            }
+            else
+            {
+                continue;
+            }
 
             //获得平面
             pcl::PointCloud<pcl::PointXYZ>::Ptr plane(new pcl::PointCloud<pcl::PointXYZ>);
@@ -197,6 +204,7 @@ void *detect_plane(void *args)
             //获取余点
             extract.setNegative(true);
             extract.filter(*rest_cloud);
+
 
             //更新分割输入点云
             *the_pc_ptr = *rest_cloud;
@@ -254,17 +262,88 @@ void *detect_plane(void *args)
                 struct Temp
                 {
                     long mtype;
-                    float mtext[4];
+                    float mtext[2];
                 } temp;
 
                 temp.mtype = 2;
                 temp.mtext[0] = planeDistance[i];
-                temp.mtext[1] = (float)world.x;
-                temp.mtext[2] = (float)world.y;
-                temp.mtext[3] = (float)world.z;
+                temp.mtext[1] = 180.0f / 3.1415926f * acosf(fabs((float)world.x));
                 msgsnd(msqid, &temp, sizeof(temp.mtext), 0);
             } 
         }  
+    }
+}
+
+
+
+
+
+
+
+/**
+ * 处理来自客户端的请求（在主函数中）
+*/
+void Respond_ClientRequst_MainProgram(uint16_t &mainStatus, dataFromTCP &DataFromTCP, int msqid, pthread_t *pid)
+{
+    //接收数据缓冲区
+    char buff[24] = {0};
+
+    //响应客户端发来的数据
+    for(int i = 0; i < DataFromTCP.childcount; i++)
+    {
+        if(read(DataFromTCP.pipeline_read[i][0], buff, sizeof(buff)) > 0)
+        {
+            std::cout << "client " << i << " : " << buff << std::endl;
+
+            //改变全局状态
+            if(strstr(buff, "create SL"))
+            {
+                //线程未开启的状态下开启线程
+                if((mainStatus & 0x01) == 0x00)
+                {
+                    pthread_create(pid+1, NULL, detect_features, (void *)NULL);     //识别特征
+                    mainStatus |= 0x01;
+                    std::cout << "ok" << std::endl;
+                }
+            }
+            else if(strstr(buff, "create PL"))
+            {
+                //线程未开启的状态下开启线程
+                if((mainStatus & 0x02) == 0x00)
+                {
+                    pthread_create(pid+2, NULL, detect_plane, (void *)NULL);        //识别平面距离
+                    mainStatus |= 0x02;
+                }
+            }
+            else if(strstr(buff, "shutdown SL"))
+            {
+                //线程未开启的状态下关闭线程
+                if((mainStatus & 0x01) == 0x01)
+                {
+                    pthread_cancel(pid[1]);
+                    mainStatus &= 0xFE;
+                }
+            }
+            else if(strstr(buff, "shutdown PL"))
+            {
+                //线程未开启的状态下开启线程
+                if((mainStatus & 0x02) == 0x02)
+                {
+                    pthread_cancel(pid[2]);
+                    mainStatus &= 0xFD;
+                }
+            }
+
+            //改变状态后向子进程通知
+            struct Temp
+            {
+                long mtype;
+                uint16_t mtext;
+            } temp;
+            temp.mtype = mainStatusMsg;
+            temp.mtext = mainStatus;
+            msgsnd(msqid, &temp, sizeof(temp.mtext), 0);
+        }
     }
 }
 
@@ -280,7 +359,7 @@ void *detect_plane(void *args)
 */
 void Process_keyBoard_Input(void *args)
 {
-
+    
 }
 
 
@@ -306,6 +385,14 @@ void Check_Command(char *)
 */
 int main(int argc, char **argv)
 {
+/* 启动参数处理-------------------------------------------------------------------------------- */
+    if(argc < 2)
+    {
+        perror("WHU_ROBONCON: program for realsense arguments too few");
+        exit(-1);
+    }
+
+//线程、进程间通信-------------------------------------------------------------------------------------
     //防僵尸进程
     signal(SIGCHLD, SIG_IGN);
 
@@ -316,9 +403,10 @@ int main(int argc, char **argv)
     //创建消息队列
     int msqid = msgget(12345, IPC_CREAT|400);
 
-    //realsense初始化
+//realsense初始化----------------------------------------------------------------------------------------
     realsenseInit();
 
+//线程调度------------------------------------------------------------------------------------------
     //创建TCP线程
     pthread_t pid[10];
     dataFromTCP DataFromTCP;
@@ -328,74 +416,18 @@ int main(int argc, char **argv)
     //有几个子进程
     DataFromTCP.childcount = 0;
 
-    //主线程，用于响应
+    //初始默认开启识别平面线程
     uint16_t mainStatus = 0x00;
+    pthread_create(pid+2, NULL, detect_plane, (void *)NULL);        //识别平面距离
+    mainStatus |= 0x02;
+
+    //主线程，用于响应
     while(1)
     {
-        //接收数据缓冲区
-        char buff[24] = {0};
+        //接收请求，改变线程状态
+        Respond_ClientRequst_MainProgram(mainStatus, DataFromTCP, msqid, pid);
 
-        //响应客户端发来的数据
-        for(int i = 0; i < DataFromTCP.childcount; i++)
-        {
-            if(read(DataFromTCP.pipeline_read[i][0], buff, sizeof(buff)) > 0)
-            {
-                std::cout << buff << std::endl;
-
-                //改变全局状态
-                if(strstr(buff, "create SL"))
-                {
-                    //线程未开启的状态下开启线程
-                    if((mainStatus & 0x01) == 0x00)
-                    {
-                        pthread_create(pid+1, NULL, detect_features, (void *)NULL);     //识别特征
-                        mainStatus |= 0x01;
-                        std::cout << "ok" << std::endl;
-                    }
-                }
-                else if(strstr(buff, "create PL"))
-                {
-                    //线程未开启的状态下开启线程
-                    if((mainStatus & 0x02) == 0x00)
-                    {
-                        pthread_create(pid+2, NULL, detect_plane, (void *)NULL);        //识别平面距离
-                        mainStatus |= 0x02;
-                    }
-                }
-                else if(strstr(buff, "shutdown SL"))
-                {
-                    //线程未开启的状态下关闭线程
-                    if((mainStatus & 0x01) == 0x01)
-                    {
-                        pthread_cancel(pid[1]);
-                        mainStatus &= 0xFE;
-                    }
-                }
-                else if(strstr(buff, "shutdown PL"))
-                {
-                    //线程未开启的状态下开启线程
-                    if((mainStatus & 0x02) == 0x02)
-                    {
-                        pthread_cancel(pid[2]);
-                        mainStatus &= 0xFD;
-                    }
-                }
-
-                //改变状态后向子进程通知
-                struct Temp
-                {
-                    long mtype;
-                    uint16_t mtext;
-                } temp;
-                temp.mtype = mainStatusMsg;
-                temp.mtext = mainStatus;
-                msgsnd(msqid, &temp, sizeof(temp.mtext), 0);
-            }
-        }
-
-        //向TCP线程更新状态
-        // write(DataFromTCP.pipeline_write[0][0], &mainStatus, sizeof(mainStatus));
-        // std::cout << write(DataFromTCP.pipeline_write[0][1], &mainStatus, sizeof(mainStatus)) << std::endl;
+        //延迟
         usleep(10000);
     }
 
