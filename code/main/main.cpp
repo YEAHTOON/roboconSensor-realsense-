@@ -115,6 +115,9 @@ void *detect_features(void *args)
 */
 void *detect_plane(void *args)
 {
+    //欧拉角的方法与数据
+    eulerSet theEuler(0.9f, 0.1f);
+
     //消息队列
     int msqid = msgget(111, IPC_CREAT|400);
 
@@ -248,13 +251,17 @@ void *detect_plane(void *args)
         the_pc_ptr.reset();
 
         //获得姿态角
-        euler attitudeAngle = getCameraEuler();
+        if(bigcount == 0)
+        {
+            theEuler.ResetAccurateEuler();
+        }
+        euler attitudeAngle = getCameraEuler(theEuler);
 
         for(int i = 0; i < 3; i++)
         {
             //获取平面世界坐标系下的法向量
             dimension3 the_vector = {-plane_k[i][2], plane_k[i][0], plane_k[i][1]}; 
-            dimension3 world = INS_revolve(the_vector, attitudeAngle.roll, attitudeAngle.pitch, attitudeAngle.yaw);
+            dimension3 world = INS_revolve(the_vector, attitudeAngle.roll, attitudeAngle.pitch, 0.0f);
 
             if(fabs(world.z) > 0.9f) continue;
             else if((fsqrt(world.y*world.y + world.x*world.x) > 0.9f)&&(planeDistance[i] > 0.1f))
@@ -267,10 +274,13 @@ void *detect_plane(void *args)
 
                 temp.mtype = 2;
                 temp.mtext[0] = planeDistance[i];
-                temp.mtext[1] = 180.0f / 3.1415926f * acosf(fabs((float)world.x));
-                msgsnd(msqid, &temp, sizeof(temp.mtext), 0);
+                temp.mtext[1] = (world.x == 0) ? (90.0f):(180.0f * atanf(world.y / world.x) / 3.1415926f);
+                msgsnd(msqid, &temp, sizeof(temp.mtext), IPC_NOWAIT);
             } 
         }  
+
+        //大循环计数
+        bigcount++;
     }
 }
 
