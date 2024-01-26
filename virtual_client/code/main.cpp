@@ -14,6 +14,9 @@
 
 // int main(int argc, char **argv)
 // {
+//     //防止僵尸进程
+//     signal(SIGCHLD, SIG_IGN);
+
 //     //小摄像头的数据
 //     smallCamera_data smallCamera_data_1;
 //     smallCamera_data_1.angle = 6.66f;
@@ -72,11 +75,11 @@ int main(int argc, char **argv)
     //防止僵尸进程
     signal(SIGCHLD, SIG_IGN);
 
-    std::cout << typeid(argv[1]).name() << std::endl;
+    // std::cout << typeid(argv[1]).name() << std::endl;
 
     //本地的地址
     struct sockaddr_in cliAddr;
-    cliAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    cliAddr.sin_addr.s_addr = inet_addr("192.168.3.112");
     cliAddr.sin_port = htons(std::atoi(argv[1]));
     cliAddr.sin_family = AF_INET;
 
@@ -99,7 +102,7 @@ int main(int argc, char **argv)
 
     //另一端的地址
     struct sockaddr_in serAddr;
-    serAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serAddr.sin_addr.s_addr = inet_addr("192.168.3.209");
     serAddr.sin_port = htons(3000);
     serAddr.sin_family = AF_INET;
 
@@ -139,3 +142,18 @@ int main(int argc, char **argv)
 
     // close(pcSocket);
 }
+
+
+// int main(int argc, char **argv)
+// {
+//     signal(SIGCHLD, SIG_IGN);
+
+//     while(1)
+//     {
+//         std::cout << "alright" << std::endl;
+//         sleep(1);
+//     }
+
+//     return 0;
+// }
+

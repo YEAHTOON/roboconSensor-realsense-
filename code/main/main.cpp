@@ -1,5 +1,7 @@
 #include "main.hpp"
 
+//子进程的数量
+int *children_count;
 
 //信号量
 sem_t detectPlane_SEM, detectFeature_SEM;
@@ -113,10 +115,17 @@ void *detect_features(void *args)
  * 
  * 
 */
+#define x_distance 0.24f
+#define y_distance 0.153488f
+
 void *detect_plane(void *args)
 {
     //欧拉角的方法与数据
     eulerSet theEuler(0.9f, 0.1f);
+
+    //低通滤波器
+    LowPass_Filter lowpass_filter;
+    LowPass_Filter lowpass_filter_angle;
 
     //消息队列
     int msqid = msgget(111, IPC_CREAT|400);
@@ -126,6 +135,11 @@ void *detect_plane(void *args)
 
     while(1)
     {
+        
+
+        //通知脚本无问题
+        std::cout << "PL normal" << std::endl;
+
         //如果图像未更新，在此处堵塞
         sem_wait(&detectPlane_SEM);
 
@@ -181,11 +195,12 @@ void *detect_plane(void *args)
         float plane_k[3][4];
 
         //循环分割
-        int acount = 0;
         while(((double)(int)the_pc_ptr->size() > (double)source_size * 0.1)&&(count < 3))
         {
-            acount++;
+            //计数
+            count++;
 
+            //点太少就结束
             if(the_pc_ptr->size() > 10)
             {
                 seg.setInputCloud(the_pc_ptr);
@@ -239,9 +254,6 @@ void *detect_plane(void *args)
 
             //释放平面
             plane.reset();
-
-            //计数
-            count++;
         }
 
         //释放内存
@@ -264,7 +276,7 @@ void *detect_plane(void *args)
             dimension3 world = INS_revolve(the_vector, attitudeAngle.roll, attitudeAngle.pitch, 0.0f);
 
             if(fabs(world.z) > 0.9f) continue;
-            else if((fsqrt(world.y*world.y + world.x*world.x) > 0.9f)&&(planeDistance[i] > 0.1f))
+            else if(((float)sqrt((double)(world.y*world.y + world.x*world.x)) > 0.9f)&&(planeDistance[i] > 0.1f))
             {
                 struct Temp
                 {
@@ -272,10 +284,37 @@ void *detect_plane(void *args)
                     float mtext[2];
                 } temp;
 
+                //角度低通滤波
+                float angle_rad = (world.x == 0.0f) ? (3.1415926f / 2.0f):(atanf(world.y / world.x));
+                float angle = 180.0f * angle_rad / 3.1415926f;
+                if(bigcount == 0)
+                {
+                    lowpass_filter_angle.set(angle);
+                }
+                else
+                {
+                    lowpass_filter_angle.insert(angle);
+                }
+
+                //初始低通滤波设置为当前值
+                float robot_planeDistance = planeDistance[i] + x_distance * sinf(-angle_rad) + y_distance * cosf(-angle_rad);
+                if(bigcount == 0)
+                {
+                    lowpass_filter.set(robot_planeDistance);
+                }
+                else    //否则插入新的数据一起滤波
+                {
+                    lowpass_filter.insert(robot_planeDistance);
+                }
+
                 temp.mtype = 2;
-                temp.mtext[0] = planeDistance[i];
-                temp.mtext[1] = (world.x == 0) ? (90.0f):(180.0f * atanf(world.y / world.x) / 3.1415926f);
-                msgsnd(msqid, &temp, sizeof(temp.mtext), IPC_NOWAIT);
+                temp.mtext[0] = lowpass_filter.getData();
+                temp.mtext[1] = lowpass_filter_angle.getData();
+
+                for(int i = 0; i < *children_count; i++)
+                {
+                    msgsnd(msqid, &temp, sizeof(temp.mtext), IPC_NOWAIT);
+                }
             } 
         }  
 
@@ -352,7 +391,10 @@ void Respond_ClientRequst_MainProgram(uint16_t &mainStatus, dataFromTCP &DataFro
             } temp;
             temp.mtype = mainStatusMsg;
             temp.mtext = mainStatus;
-            msgsnd(msqid, &temp, sizeof(temp.mtext), 0);
+            for(int i = 0; i < *children_count; i++)
+            {
+                msgsnd(msqid, &temp, sizeof(temp.mtext), 0);
+            }
         }
     }
 }
@@ -396,11 +438,11 @@ void Check_Command(char *)
 int main(int argc, char **argv)
 {
 /* 启动参数处理-------------------------------------------------------------------------------- */
-    if(argc < 2)
-    {
-        perror("WHU_ROBONCON: program for realsense arguments too few");
-        exit(-1);
-    }
+    // if(argc < 2)
+    // {
+    //     perror("WHU_ROBONCON: program for realsense arguments too few");
+    //     exit(-1);
+    // }
 
 //线程、进程间通信-------------------------------------------------------------------------------------
     //防僵尸进程
@@ -420,11 +462,12 @@ int main(int argc, char **argv)
     //创建TCP线程
     pthread_t pid[10];
     dataFromTCP DataFromTCP;
-    pthread_create(pid, NULL, realsenseUpdate, (void *)NULL);       //更新图片
+    pthread_create(pid, NULL, realsenseUpdate, (void *)NULL);               //更新图片
     pthread_create(pid+3, NULL, processTCP, (void *)&DataFromTCP);          //tcp通信
 
-    //有几个子进程
+    //子进程的数目
     DataFromTCP.childcount = 0;
+    children_count = &(DataFromTCP.childcount);
 
     //初始默认开启识别平面线程
     uint16_t mainStatus = 0x00;
@@ -434,6 +477,9 @@ int main(int argc, char **argv)
     //主线程，用于响应
     while(1)
     {
+        //提示脚本正常运行
+        if((mainStatus & 0x02) != 0x02) std::cout << "PL normal" << std::endl;
+
         //接收请求，改变线程状态
         Respond_ClientRequst_MainProgram(mainStatus, DataFromTCP, msqid, pid);
 

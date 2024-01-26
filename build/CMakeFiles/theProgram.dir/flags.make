@@ -6,5 +6,5 @@ CXX_DEFINES = -DDISABLE_PCAP -DDISABLE_PNG -DELPP_NO_DEFAULT_LOG_FILE -Dkiss_fft
 
 CXX_INCLUDES = -isystem /usr/include/eigen3 -isystem /usr/local/include/pcl-1.12 -isystem /usr/include/ni -isystem /usr/include/openni2 -isystem /usr/include/opencv4 -isystem /opt/ros/humble/include -isystem /usr/local/include/vtk-9.2 -isystem /usr/local/include/vtk-9.2/vtknlohmannjson/include -isystem /usr/local/include/vtk-9.2/vtkfreetype/include
 
-CXX_FLAGS = -msse4.2 -mfpmath=sse
+CXX_FLAGS =  -O0 -Wall -g2 -ggdb -msse4.2 -mfpmath=sse
 
