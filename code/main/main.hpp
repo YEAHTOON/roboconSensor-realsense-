@@ -15,6 +15,7 @@
 
 #include "../realsense/imuStream.hpp"
 #include "../realsense/picStream.hpp"
+#include "../filter/filter.hpp"
 #include "../realsense/my_realsense2.hpp"
 #include "../dataFrame/dataFrame.hpp"
 #include "../straightLine/straightLine.hpp"
